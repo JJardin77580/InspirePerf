@@ -1,5 +1,7 @@
 package TestQos;
 
+import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
+
 public class Bbox {
 	private final int xmin;
 	private final int xmax;
@@ -20,12 +22,18 @@ public class Bbox {
 
 	}
 
+	public String GetEPSG(){
+		return EPSG;
+	}
+
 	@Override
 	public String toString() {
-	
-	String s = "bbox="+xmin+","+xmax+","+ymin+","+ymax+"&EPSG="+EPSG;
-	return s;
+
+		String s = "bbox="+xmin+","+xmax+","+ymin+","+ymax;
+		return s;
 	}
+
+
 
 
 }

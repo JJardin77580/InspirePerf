@@ -1,5 +1,9 @@
 package TestQos;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
+
 public class WmsRequest {
 	private final String serveur;
 	private final String depot;
@@ -12,6 +16,12 @@ public class WmsRequest {
 		this.depot=depot;
 		this.layer=layer;
 		this.BBox=BBox;
+	}
+	
+	public URL WmsRequesttoUrlGetMap() throws MalformedURLException{
+		String url_spec="http://"+serveur+"/"+depot+"?service=WMS&version=1.1.0&request=GetMap&layers="+layer+"&"+BBox.toString()+"&width=512&height=353&srs=EPSG:"+BBox.GetEPSG()+"&format=application/openlayers";
+		URL url = new URL(url_spec);
+		return url;
 	}
 
 }
