@@ -1,6 +1,8 @@
 package TestQos;
 
-import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
+import java.util.Random;
+
+
 
 public class Bbox {
 	private final int xmin;
@@ -33,7 +35,19 @@ public class Bbox {
 		return s;
 	}
 
+	public Bbox BBoxRandom(){
+		int dif_xminmax=xmax-xmin;
+		int dif_yminymax=ymax-ymin;
+		Random rand = new Random();
+		int newxmin = rand.nextInt(xmax - xmin + 1) + xmin;
+		int zoom= rand.nextInt(zoom_max-zoom_min+1)+zoom_min;
+		int newxmax= newxmin+(dif_xminmax/(2*zoom));
+		int newymin=rand.nextInt(ymax - ymin + 1) + ymin;
+		int newymax= newymin+(dif_yminymax/(2*zoom));
+		Bbox newBBOX= new Bbox(newxmin, newxmax, newymin, newymax, zoom_min,zoom_max, EPSG);
+		return newBBOX;
 
+	}
 
 
 }

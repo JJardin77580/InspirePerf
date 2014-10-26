@@ -19,9 +19,12 @@ public class WmsRequest {
 	}
 	
 	public URL WmsRequesttoUrlGetMap() throws MalformedURLException{
+		
 		String url_spec="http://"+serveur+"/"+depot+"?service=WMS&version=1.1.0&request=GetMap&layers="+layer+"&"+BBox.toString()+"&width=512&height=353&srs=EPSG:"+BBox.GetEPSG()+"&format=application/openlayers";
 		URL url = new URL(url_spec);
 		return url;
 	}
+	
+
 
 }
