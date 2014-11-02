@@ -5,29 +5,40 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Time;
 
 
 
 public class HttpGet {
 	private final String user_agent = "Mozilla/5.0"; // par defaut test avec mozilla
-	private final String url;
+	private final URL url;
 
-	public HttpGet(String url){
-		this.url=url;
+	public HttpGet(URL url2){
+		this.url=url2;
 	}
 
-	public String sendHttp() throws IOException{
-		URL url_sent= new URL(url);
+	public long sendHttp() throws IOException{
+		long t = System.currentTimeMillis();
+		URL url_sent= url;
 		HttpURLConnection con = (HttpURLConnection) url_sent.openConnection();
 		con.setRequestMethod("GET");
 		con.setRequestProperty("User-Agent", user_agent);
-
+		long result=0;
 		int reponse=con.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + reponse);
+		if(reponse!=200){
+			System.out.println("echec");
+			result=3000;
+			return result;
+		}
+		//System.out.println("\nSending 'GET' request to URL : " + url);
+		//System.out.println("Response Code : " + reponse);
 
 		BufferedReader in = new BufferedReader(
 				new InputStreamReader(con.getInputStream()));
+		 result=System.currentTimeMillis()-t;
+		//System.out.println(result);
+
+		/*
 		String inputLine;
 		StringBuffer response = new StringBuffer();
 
@@ -35,9 +46,9 @@ public class HttpGet {
 			response.append(inputLine);
 		}
 		in.close();
-
+		 */
 		//print result
-		return(response.toString());
+		return(result);
 	}
 	/*
 	public static void main(String[] args) throws IOException {

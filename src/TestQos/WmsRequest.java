@@ -8,7 +8,7 @@ public class WmsRequest {
 	private final String serveur;
 	private final String depot;
 	private final String layer;
-	private final Bbox BBox;
+	private  final Bbox BBox;
 	
 	public WmsRequest(String serveur,String depot,String layer,Bbox BBox)
 	{
@@ -18,11 +18,20 @@ public class WmsRequest {
 		this.BBox=BBox;
 	}
 	
-	public URL WmsRequesttoUrlGetMap() throws MalformedURLException{
+	public URL WmsRequesttoUrlGetMap() {
 		
-		String url_spec="http://"+serveur+"/"+depot+"?service=WMS&version=1.1.0&request=GetMap&layers="+layer+"&"+BBox.toString()+"&width=512&height=353&srs=EPSG:"+BBox.GetEPSG()+"&format=application/openlayers";
-		URL url = new URL(url_spec);
-		return url;
+		String url_spec="http://"+serveur+"/"+depot+"?service=WMS&version=1.1.0&request=GetMap&layers="+layer+"&"+BBox.BBoxRandom().toString()+"&width=512&height=353&srs=EPSG:"+BBox.GetEPSG()+"&format=application/openlayers";
+		URL url;
+		try {
+			url = new URL(url_spec);
+			return url;
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+		
 	}
 	
 

@@ -1,63 +1,51 @@
 package TestQos;
-
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-
-
+import java.io.PrintWriter;
+import java.net.URL;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
-	private static Object lock= new Object();
-	private static ArrayList<String> l= new ArrayList<String>();
-	public static void Message( ) throws InterruptedException, IOException{
-		synchronized (lock) {
 
-			HttpGet h = new HttpGet("http://test");
-			int compteur=0;
-			while(compteur<=59){
-				//System.out.println("Le test se passe bien");
-				l.add(h.sendHttp());
-				compteur++;
-				lock.wait(1000);
+
+	public static void main(String[] args) throws InterruptedException, IOException {
+
+		Bbox b = new Bbox(102438,6709004,348383,6878675,1,1,"2154");
+	WmsRequest wms = new WmsRequest(".fr","geoserver","", b);
+		URL u=wms.WmsRequesttoUrlGetMap();
+		//System.out.println(u.toString());
+		CounterWmsRequestTime count= new CounterWmsRequestTime();
+		TheadGetMap r = new TheadGetMap(wms,count);
+
+		final ScheduledExecutorService pool = Executors.newScheduledThreadPool(18,r);
+		long time= System.currentTimeMillis();
+		for(int i=0;i<18;i++){
+			pool.scheduleAtFixedRate(r.getUrlRunnable(),0,1,TimeUnit.SECONDS);
+		}
+		while(System.currentTimeMillis()-time<60000){
+		}
+		pool.shutdown();
+		while (!pool.isTerminated()) {
+
+		}
+		System.out.println(count.get());
+		{
+			PrintWriter filestat;
+			filestat =  new PrintWriter(new BufferedWriter
+					(new FileWriter("stat.txt")));
+
+			long tab[]= count.getStat();
+
+			filestat.println("temps de réponse \n");
+			for (long stat : tab) {
+				
+				filestat.println(stat);
 
 			}
-		}
-	}
-	public static void main(String[] args) throws InterruptedException {
-		List<Thread> t = new ArrayList<Thread>();
-		for (int i=0;i<=19;i++)
-		{
-			Runnable t1= ()->{try {
-				Message();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}};
-
-
-			Thread tmp= new Thread(t1);
-			t.add(tmp);
-
+			filestat.close();
 
 		}
-
-		for (Thread thread : t) {
-			thread.start();
-		}
-
-
-
-
-		boolean allinterupted=false;
-
-		while(!allinterupted)
-		{
-			allinterupted=true;
-			for (Thread thread : t) {
-				allinterupted=(!thread.isAlive())&allinterupted;
-			}
-		}
-		System.out.println("nous avons eu" + l.size() + "requetes");
-	}
-}
+	}}
