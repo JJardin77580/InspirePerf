@@ -20,7 +20,7 @@ public class WmsRequest {
 	
 	public URL WmsRequesttoUrlGetMap() {
 		
-		String url_spec="http://"+serveur+"/"+depot+"?service=WMS&version=1.3.0&request=GetMap&layers="+layer+"&"+BBox.BBoxRandom().toString()+"&width=512&height=353&CRS=EPSG:"+BBox.GetEPSG()+"&format=image/png";
+		String url_spec="http://"+serveur+"/"+depot+"?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS="+layer+"&"+BBox.BBoxRandom().toString()+"&WIDTH=512&HEIGHT=353&CRS=EPSG:"+BBox.GetEPSG()+"&FORMAT=image/png";
 		URL url;
 		try {
 			url = new URL(url_spec);
